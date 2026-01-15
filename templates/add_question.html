@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Question - PaperGen</title>
+    <link rel="stylesheet" href="static/add_question.css">
+    <link rel="icon" href="static/images/favicon.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar left-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <h1>Paper<span>Gen</span></h1>
+                </div>
+            </div>
+            <div class="welcome-message">
+                <i class="fas fa-user-circle"></i>
+                <span>Welcome, <strong id="username">User</strong></span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('index') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="add_question.html">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add Question</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="show_questions">
+                            <i class="fas fa-list"></i>
+                            <span>Show Questions</span>
+                        </a>
+                    </li>
+                    <li class="logout">
+                        <a href="/logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Add Question</h1>
+            </header>
+
+            <div class="form-container">
+                <form id="addQuestionForm">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="branch">Branch:</label>
+                            <input type="text" id="branch" name="branch" placeholder="Enter Branch Name" required>
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="semester">Semester:</label>
+                            <select id="semester" name="semester" required onchange="fetchSubjects()">
+                                <option value="" disabled selected>Select Semester</option>
+                                <option value="1">1</option> <option value="2">2</option>
+                                <option value="3">3</option> <option value="4">4</option>
+                                <option value="5">5</option> <option value="6">6</option>
+                                <option value="7">7</option> <option value="8">8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <select id="subject" name="subject" required >
+                            <option value="" disabled selected>Select Subject</option>
+                            <!-- The subjects will be dynamically populated here by the JavaScript function -->
+                        </select>
+                    </div>
+                    
+                     
+                    <!-- Add this after the subject selection field -->
+                    <!-- Add this after the subject selection field -->
+                    <div class="form-group">
+                        <label for="unit">Unit Number:</label>
+                        <input type="number" id="unit" name="unit" min="1" max="10" placeholder="Enter unit number (e.g., 1, 2, 3...)" required>
+                        <small class="help-text">Enter the unit number for this question</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="questionInput">Your Question:</label>
+                        <textarea id="questionInput" name="question_text" rows="4" placeholder="Type your question here..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Image (Optional):</label>
+                        <div class="file-input-container">
+                            <input type="file" id="question_image" name="question_image" accept="image/*">
+                            <label for="question_image" class="file-input-label">
+                                <i class="fas fa-upload"></i> Choose File
+                            </label>
+                            <span id="file-name">No file chosen</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="marks">Marks:</label>
+                            <input type="text" id="marks" name="marks" placeholder="Enter Marks" required>
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="rbt_level">RBT Level:</label>
+                            <input type="text" id="rbt_level" name="rbt_level" placeholder="Enter RBT Level" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="co">CO:</label>
+                            <input type="text" id="co" name="co" placeholder="Enter CO" required>
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="pi">PI:</label>
+                            <input type="text" id="pi" name="pi" placeholder="Enter PI" required>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="matchedQuestionsInput" name="matched_questions">
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Add Question
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <!-- Right Sidebar - Matched Questions -->
+        <aside class="sidebar right-sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-search"></i> Matched Questions</h2>
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="matched-questions-container">
+                <div id="matchedQuestion">
+                    <p>No match found</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Mobile Matched Questions Drawer -->
+    <div class="mobile-drawer">
+        <div class="drawer-header">
+            <h2><i class="fas fa-search"></i> Matched Questions</h2>
+            <button class="close-drawer">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="drawer-content">
+            <div id="mobileMatchedQuestion">
+                <p>No match found</p>
+            </div>
+        </div>
+        <button class="drawer-toggle">
+            <i class="fas fa-search"></i>
+            <span>Matches</span>
+        </button>
+    </div>
+
+    <script src="static/JS/Add Questions/script.js"></script>
+</body>
+</html>
+
+{% endblock %}

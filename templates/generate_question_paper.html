@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaperGen - Generate Question Paper</title>
+    <link rel="stylesheet" href="static/generate.css">
+    <link rel="icon" href="static/images/favicon.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar left-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <h1>Paper<span>Gen</span></h1>
+                </div>
+            </div>
+            <div class="welcome-message">
+                <i class="fas fa-user-circle"></i>
+                <span>Welcome, <strong id="username"></strong></span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('index') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="javascript:void(0);">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Generate Paper</span>
+                        </a>
+                    </li>
+                    <li class="logout">
+                        <a href="/logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Generate Question Paper</h1>
+            </header>
+
+            <div class="form-container">
+                <form id="questionPaperForm">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="branch">Branch:</label>
+                            <input type="text" id="branch" name="branch" placeholder="Enter Branch Name">
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="semester">Semester:</label>
+                            <select id="semester" name="semester" onchange="fetchSubjects()">
+                                <option value="" disabled selected>Select Semester</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <select id="subject" name="subject" required>
+                            <option value="" disabled selected>Select Subject</option>
+                            <!-- The subjects will be dynamically populated here by the JavaScript function -->
+                        </select>
+                    </div>
+
+
+                    <!-- Add this after the subject selection field -->
+                    <div class="form-group">
+                        <label for="fromUnit">From Unit:</label>
+                        <input type="number" id="fromUnit" name="fromUnit" min="1" max="10" placeholder="Starting unit (e.g., 1)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="toUnit">To Unit:</label>
+                        <input type="number" id="toUnit" name="toUnit" min="1" max="10" placeholder="Ending unit (e.g., 3)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <small style="color: #666;">
+                            Examples:<br>
+                            • Unit 1 to Unit 1 = Only Unit 1<br>
+                            • Unit 1 to Unit 3 = Units 1, 2, and 3<br>
+                            • Unit 2 to Unit 5 = Units 2, 3, 4, and 5
+                        </small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="subject_code">Subject Code:</label>
+                            <input type="text" id="subject_code" name="subject_code" placeholder="Enter Subject Code">
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="paper_code">Question Paper Code:</label>
+                            <input type="text" id="paper_code" name="paper_code" placeholder="Enter Paper Code">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="total_marks">Marks of Paper:</label>
+                            <input type="number" id="total_marks" name="total_marks" placeholder="Enter Total Marks">
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="exam_date">Date of Exam:</label>
+                            <input type="date" id="exam_date" name="exam_date">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="exam_time">Time for Exam:</label>
+                            <input type="text" id="exam_time" name="exam_time" placeholder="e.g., 02:30 PM to 05:00 PM">
+                        </div>
+
+                        <div class="form-group half">
+                            <label for="examination">Examination Name:</label>
+                            <input type="text" id="examination" name="examination" placeholder="e.g., Winter Examination 2025">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download Question Paper
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="static/JS/Generate Question Paper/script.js"></script>
+</body>
+</html>
+{% endblock %}

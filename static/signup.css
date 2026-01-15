@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #1a202c;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    margin-top: 7%;
+}
+
+.signup-box {
+    background: #2d3748;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    opacity: 0;
+}
+
+.signup-box:hover {
+    transform: translateY(-5px);
+}
+
+.signup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.signup-header h2 {
+    color: #e2e8f0;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.signup-header p {
+    color: #a0aec0;
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-field {
+    position: relative; /* Ensure the parent container is positioned */
+}
+
+.input-field i.fas {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    z-index: 1;
+}
+
+.role-select {
+    cursor: not-allowed;
+    pointer-events: none; /* This will also prevent hover/focus effects */
+}
+
+/* Ensure all input fields and select have the same background color */
+.input-field input,
+.input-field select {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 1px solid #4a5568;
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #1a202c; /* Consistent background color */
+    color: #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 0;
+}
+
+.input-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+    padding-right: 40px;
+}
+
+.input-field input::placeholder,
+.input-field select::placeholder {
+    color: #718096;
+}
+
+.input-field input:focus,
+.input-field select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+/* ✅ Improved toggle password button styling */
+.toggle-password {
+    position: absolute;
+    right: 13%; /* Adjusted to prevent overflow */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    cursor: pointer;
+    z-index: 10; /* Increased z-index for better clickability */
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 15px;
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: #4299e1;
+}
+
+/* ✅ Ensure padding to avoid overlap with toggle button */
+input[type="password"] {
+    padding-right: 40px; /* Add padding so the button doesn't overlap text */
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.signup-btn:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+    box-shadow: 0 0 15px rgba(66, 153, 225, 0.5);
+    transform: translateY(-2px);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #4a5568;
+}
+
+.divider span {
+    padding: 0 10px;
+    color: #a0aec0;
+    font-size: 14px;
+}
+
+.login-link {
+    text-align: center;
+    color: #a0aec0;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #4299e1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.login-link a:hover {
+    color: #63b3ed;
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #fc8181;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* New styles for validation requirements */
+.validation-requirements {
+    background: #1a202c;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #a0aec0;
+    font-size: 14px;
+    border: 1px solid #4a5568;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease, padding 0.5s ease, margin 0.5s ease;
+}
+
+.validation-requirements.show {
+    max-height: 300px;
+    opacity: 1;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.validation-requirements h4 {
+    margin-bottom: 10px;
+    color: #e2e8f0;
+    font-size: 15px;
+}
+
+.validation-requirements ul {
+    list-style: none;
+    padding-left: 5px;
+}
+
+.validation-requirements li, 
+.validation-requirements div {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.validation-requirements i {
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.validation-requirements .fa-times-circle {
+    color: #fc8181;
+}
+
+.validation-requirements .fa-check-circle {
+    color: #68d391;
+}
+
+.hidden {
+    display: none;
+}
+
+.valid-text {
+    color: #68d391;
+}
+
+@media (max-width: 480px) {
+    .signup-box {
+        padding: 30px 20px;
+    }
+
+    .toggle-password {
+        right: 15%;
+    }
+}

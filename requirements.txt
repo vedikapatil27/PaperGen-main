@@ -1,0 +1,9 @@
+Flask==2.1.1
+flask-cors==5.0.1
+flask-mail==0.9.1
+psycopg[binary]       # PostgreSQL production-ready driver
+python-dotenv==0.19.2
+python-docx==0.8.11
+werkzeug==2.1.1
+PyJWT==2.3.0
+gunicorn==21.2.0
