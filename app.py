@@ -24,12 +24,13 @@ from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 import re
+import secrets
 
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(16)
-# print(app.secret_key)
+# Use a stable secret so email verification tokens remain valid across restarts
+app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(16)
 
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -444,14 +445,18 @@ def update_user_status():
         cursor.execute("UPDATE users SET status = %s WHERE id = %s", (new_status, user_id))
         connection.commit()
 
-        # ✅ Send approval email only if status is approved
+        # ✅ Send approval email only if status is approved; also resend verification if needed
         if new_status == "approved":
-            cursor.execute("SELECT email, username FROM users WHERE id = %s", (user_id,))
+            cursor.execute("SELECT email, username, is_verified FROM users WHERE id = %s", (user_id,))
             user = cursor.fetchone()
 
             if user:
-                email, username = user
+                email, username, is_verified = user
                 send_user_approval_email(email, username)
+
+                # If the user never verified, send a fresh verification link after approval
+                if not is_verified:
+                    send_verification_email(email)
 
         return jsonify({"message": f"User status updated to {new_status}."})
 
